@@ -17,7 +17,7 @@ export const SocketContextProvider = ({ children }) => {
 
 	useEffect(() => {
 		if (authUser) {
-			const socket = io("https://chat-app-jade-chi.vercel.app/", {
+			const socket = io("https://localhost:5000", {
 				transports: ['polling', 'websocket'],
 				query: {
 					userId: authUser._id,
