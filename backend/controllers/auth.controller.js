@@ -4,67 +4,79 @@ import generateTokenAndSetCookie from "../utils/generateToken.js";
 
 export const signup = async (req, res) => {
 	try {
-		const { fullName, username, password, confirmPassword, gender } = req.body;
+		const { fullName, username, password, confirmPassword, gender = "male" } = req.body;
 
+		// Check if all required fields are provided
+		if (!fullName || !username || !password || !confirmPassword) {
+			return res.status(400).json({ error: "All fields are required" });
+		}
+
+		// Password match validation
 		if (password !== confirmPassword) {
 			return res.status(400).json({ error: "Passwords don't match" });
 		}
 
-		const user = await User.findOne({ username });
-
-		if (user) {
+		// Check if username already exists
+		const existingUser = await User.findOne({ username });
+		if (existingUser) {
 			return res.status(400).json({ error: "Username already exists" });
 		}
 
-		// HASH PASSWORD HERE
+		// Hash password
 		const salt = await bcrypt.genSalt(10);
 		const hashedPassword = await bcrypt.hash(password, salt);
 
-		// https://avatar-placeholder.iran.liara.run/
-
+		// Generate profile picture URL based on gender
 		const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
 		const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
+		const profilePic = gender.toLowerCase() === "male" ? boyProfilePic : girlProfilePic;
 
+		// Create new user
 		const newUser = new User({
 			fullName,
 			username,
 			password: hashedPassword,
 			gender,
-			profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
+			profilePic,
 		});
 
-		if (newUser) {
-			// Generate JWT token here
-			generateTokenAndSetCookie(newUser._id, res);
-			await newUser.save();
+		// Save user and generate JWT
+		await newUser.save();
+		generateTokenAndSetCookie(newUser._id, res);
 
-			res.status(201).json({
-				_id: newUser._id,
-				fullName: newUser.fullName,
-				username: newUser.username,
-				profilePic: newUser.profilePic,
-			});
-		} else {
-			res.status(400).json({ error: "Invalid user data" });
-		}
+		res.status(201).json({
+			_id: newUser._id,
+			fullName: newUser.fullName,
+			username: newUser.username,
+			profilePic: newUser.profilePic,
+		});
 	} catch (error) {
-		console.log("Error in signup controller", error.message);
+		console.error("Error in signup controller:", error.message);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
 
+
 export const login = async (req, res) => {
 	try {
 		const { username, password } = req.body;
-		const user = await User.findOne({ username });
-		const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
 
+		// Check if username and password are provided
+		if (!username || !password) {
+			return res.status(400).json({ error: "Username and password are required" });
+		}
+
+		// Find user by username
+		const user = await User.findOne({ username });
+
+		// Validate user existence and password correctness
+		const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
 		if (!user || !isPasswordCorrect) {
 			return res.status(400).json({ error: "Invalid username or password" });
 		}
 
+		// Generate JWT token and send user data
 		generateTokenAndSetCookie(user._id, res);
-
 		res.status(200).json({
 			_id: user._id,
 			fullName: user.fullName,
@@ -72,17 +84,17 @@ export const login = async (req, res) => {
 			profilePic: user.profilePic,
 		});
 	} catch (error) {
-		console.log("Error in login controller", error.message);
+		console.error("Error in login controller:", error.message);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
-
 export const logout = (req, res) => {
 	try {
-		res.cookie("jwt", "", { maxAge: 0 });
+		// Clear the JWT cookie
+		res.cookie("jwt", "", { httpOnly: true, maxAge: 0 });
 		res.status(200).json({ message: "Logged out successfully" });
 	} catch (error) {
-		console.log("Error in logout controller", error.message);
+		console.error("Error in logout controller:", error.message);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
