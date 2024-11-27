@@ -3,22 +3,16 @@ import User from "../models/user.model.js";
 
 const protectRoute = async (req, res, next) => {
 	try {
-		// Extract the JWT token from cookies
 		const token = req.cookies.jwt;
-
 		if (!token) {
 			return res.status(401).json({ error: "Unauthorized - No Token Provided" });
 		}
-
-		// Verify and decode the token, ensure we extract the correct 'id' or 'userId'
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
 		if (!decoded) {
 			return res.status(401).json({ error: "Unauthorized - Invalid Token" });
 		}
-
-		// Ensure the token has the correct field 'id' or 'userId'
-		const userId = decoded.id || decoded.userId; // Check if it’s 'id' or 'userId' based on token generation
+		const userId = decoded.id || decoded.userId;
 		if (!userId) {
 			return res.status(401).json({ error: "Unauthorized - User ID missing from token" });
 		}
