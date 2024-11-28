@@ -20,7 +20,7 @@ const __dirname = path.dirname(__filename);
 
 // Enable CORS for frontend on different port
 app.use(cors({
-    origin: "http://localhost:3000", // Update if the frontend is hosted elsewhere
+    origin: "https://chat-app-frontend-4mfe.onrender.com", // Update if the frontend is hosted elsewhere
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }));
