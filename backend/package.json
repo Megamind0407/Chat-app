@@ -4,10 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-		"server": "nodemon backend/server.js",
-		"start": "node backend/server.js",
-		"build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
-	},
+  "server": "nodemon server.js",
+  "build": "npm install"
+  },
   "type": "module",
   "keywords": [],
   "author": "",
