@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import config from "../config";
 
 export const AuthContext = createContext();
 
@@ -9,7 +10,35 @@ export const useAuthContext = () => {
 
 // eslint-disable-next-line react/prop-types
 export const AuthContextProvider = ({ children }) => {
-	const [authUser, setAuthUser] = useState(JSON.parse(localStorage.getItem("chat-user")) || null);
+	const [authUser, setAuthUser] = useState(
+		JSON.parse(localStorage.getItem("chat-user")) || null
+	);
 
-	return <AuthContext.Provider value={{ authUser, setAuthUser }}>{children}</AuthContext.Provider>;
+	const backendUrl = config.backendUrl;
+
+	// Example function to send a request to the backend for authentication
+	const loginUser = async (username, password) => {
+		try {
+			const response = await fetch(`${backendUrl}/api/login`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ username, password }),
+			});
+			const data = await response.json();
+			if (data.user) {
+				setAuthUser(data.user);
+				localStorage.setItem("chat-user", JSON.stringify(data.user));
+			}
+		} catch (error) {
+			console.error("Error logging in:", error);
+		}
+	};
+
+	return (
+		<AuthContext.Provider value={{ authUser, setAuthUser, loginUser }}>
+			{children}
+		</AuthContext.Provider>
+	);
 };
