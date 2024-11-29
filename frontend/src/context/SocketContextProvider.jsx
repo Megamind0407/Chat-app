@@ -18,8 +18,11 @@ export const SocketContextProvider = ({ children }) => {
                     : "http://localhost:5000";
 
             const newSocket = io(SERVER_URL, {
-                transports: ["websocket", "polling"],
-                query: { userId: authUser._id },
+                transports: ["websocket"], // Use WebSocket transport only for efficiency
+                query: { userId: authUser._id }, // Attach userId to identify user
+                reconnectionAttempts: 5, // Limit reconnection attempts
+                reconnectionDelay: 2000, // Delay between reconnection attempts (2 seconds)
+                timeout: 10000, // Connection timeout (10 seconds)
             });
 
             setSocket(newSocket);
@@ -29,11 +32,22 @@ export const SocketContextProvider = ({ children }) => {
             });
 
             return () => {
-                newSocket.close();
-                setSocket(null);
+                if (newSocket) {
+                    newSocket.disconnect(); // Properly disconnect socket
+                    setSocket(null); // Reset state
+                }
             };
+        }
+
+        if (!authUser && socket) {
+            socket.disconnect();
+            setSocket(null);
         }
     }, [authUser, socket]);
 
-    return <SocketContext.Provider value={{ socket, onlineUsers }}>{children}</SocketContext.Provider>;
+    return (
+        <SocketContext.Provider value={{ socket, onlineUsers }}>
+            {children}
+        </SocketContext.Provider>
+    );
 };
