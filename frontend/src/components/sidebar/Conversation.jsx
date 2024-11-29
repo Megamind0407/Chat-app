@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useSocketContext } from "../../context/SocketContext";
+import { useSocketContext } from "../../hooks/useSocketContext.js";
 import useConversation from "../../zustand/useConversation";
 
 // eslint-disable-next-line react/prop-types

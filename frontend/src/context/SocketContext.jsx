@@ -1,44 +1,39 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect } from "react";
 import { useAuthContext } from "./AuthContext";
 import io from "socket.io-client";
 
-const SocketContext = createContext();
+export const SocketContext = createContext();
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useSocketContext = () => {
-	return useContext(SocketContext);
-};
-
-// eslint-disable-next-line react/prop-types
 export const SocketContextProvider = ({ children }) => {
-	const [socket, setSocket] = useState(null);
-	const [onlineUsers, setOnlineUsers] = useState([]);
-	const { authUser } = useAuthContext();
+    const [socket, setSocket] = useState(null);
+    const [onlineUsers, setOnlineUsers] = useState([]);
+    const { authUser } = useAuthContext();
 
-	useEffect(() => {
-		if (authUser) {
-			const socket = io("https://chat-app-ict4.onrender.com", {
-				transports: ['polling', 'websocket'],
-				query: {
-					userId: authUser._id,
-				},
-			});
+    useEffect(() => {
+        if (authUser && !socket) {
+            const SERVER_URL =
+                // eslint-disable-next-line no-undef
+                process.env.NODE_ENV === "production"
+                    ? "https://chat-app-ict4.onrender.com"
+                    : "http://localhost:5000";
 
-			setSocket(socket);
+            const newSocket = io(SERVER_URL, {
+                transports: ["websocket", "polling"],
+                query: { userId: authUser._id },
+            });
 
-			// socket.on() is used to listen to the events. can be used both on client and server side
-			socket.on("getOnlineUsers", (users) => {
-				setOnlineUsers(users);
-			});
+            setSocket(newSocket);
 
-			return () => socket.close();
-		} else {
-			if (socket) {
-				socket.close();
-				setSocket(null);
-			}
-		}
-	}, [authUser, socket]);
+            newSocket.on("getOnlineUsers", (users) => {
+                setOnlineUsers(users);
+            });
 
-	return <SocketContext.Provider value={{ socket, onlineUsers }}>{children}</SocketContext.Provider>;
+            return () => {
+                newSocket.close();
+                setSocket(null);
+            };
+        }
+    }, [authUser, socket]);
+
+    return <SocketContext.Provider value={{ socket, onlineUsers }}>{children}</SocketContext.Provider>;
 };
