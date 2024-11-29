@@ -10,7 +10,7 @@ const server = http.createServer(app);
 // WebSocket Server setup with optimized configurations
 const io = new Server(server, {
     cors: {
-        origin: ["https://chat-app-frontend-bhce.onrender.com" || "https://localhost:3000"], // Frontend domain
+        origin: ["https://chat-app-frontend-bhce.onrender.com" ?? "https://localhost:3000"], // Frontend domain
         methods: ["GET", "POST"],
     },
     pingTimeout: 10000, // Close inactive connections after 10 seconds
