@@ -8,7 +8,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: ["https://localhost:3000" || "https://chat-app-ict4.onrender.com"], // Frontend domain
+        origin: ["https://localhost:3000" || "https://chat-app-frontend-bhce.onrender.com"], // Frontend domain
         methods: ["GET", "POST"],
     },
     pingTimeout: 10000, 
