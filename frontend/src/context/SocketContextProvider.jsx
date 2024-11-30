@@ -12,8 +12,8 @@ export const SocketContextProvider = ({ children }) => {
         if (authUser) {
             // eslint-disable-next-line no-undef
             const SERVER_URL = process.env.NODE_ENV === "production"
-                ? "https://chat-app-ict4.onrender.com"
-                : "http://localhost:5000";
+                "https://chat-app-ict4.onrender.com"
+                ?? "http://localhost:5000";
 
             return io(SERVER_URL, {
                 transports: ["websocket"],
