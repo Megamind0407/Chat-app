@@ -15,8 +15,6 @@ export const AuthContextProvider = ({ children }) => {
 	);
 
 	const backendUrl = config.backendUrl;
-
-	// Example function to send a request to the backend for authentication
 	const loginUser = async (username, password) => {
 		try {
 			const response = await fetch(`${backendUrl}/api/login`, {
