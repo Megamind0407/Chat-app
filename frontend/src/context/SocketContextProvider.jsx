@@ -1,49 +1,45 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useMemo, useEffect, useState } from "react";
 import { useAuthContext } from "./AuthContext";
 import io from "socket.io-client";
 
 export const SocketContext = createContext();
 
 export const SocketContextProvider = ({ children }) => {
-    const [socket, setSocket] = useState(null);
-    const [onlineUsers, setOnlineUsers] = useState([]);
     const { authUser } = useAuthContext();
+    const [onlineUsers, setOnlineUsers] = useState([]);
+
+    const socket = useMemo(() => {
+        if (authUser) {
+            // eslint-disable-next-line no-undef
+            const SERVER_URL = process.env.NODE_ENV === "production"
+                ? "https://chat-app-ict4.onrender.com"
+                : "http://localhost:5000";
+
+            return io(SERVER_URL, {
+                transports: ["websocket"],
+                query: { userId: authUser._id },
+                reconnectionAttempts: 5,
+                reconnectionDelay: 2000,
+                timeout: 10000,
+            });
+        }
+        return null;
+    }, [authUser]);
 
     useEffect(() => {
-        if (authUser && !socket) {
-            const SERVER_URL =
-                // eslint-disable-next-line no-undef
-                process.env.NODE_ENV === "production"
-                    ? "https://chat-app-ict4.onrender.com"
-                    : "http://localhost:5000";
+        if (socket) {
+            console.log("WebSocket connected:", socket.id);
 
-            const newSocket = io(SERVER_URL, {
-                transports: ["websocket"], // Use WebSocket transport only for efficiency
-                query: { userId: authUser._id }, // Attach userId to identify user
-                reconnectionAttempts: 5, // Limit reconnection attempts
-                reconnectionDelay: 2000, // Delay between reconnection attempts (2 seconds)
-                timeout: 10000, // Connection timeout (10 seconds)
-            });
-
-            setSocket(newSocket);
-
-            newSocket.on("getOnlineUsers", (users) => {
+            socket.on("getOnlineUsers", (users) => {
                 setOnlineUsers(users);
             });
 
             return () => {
-                if (newSocket) {
-                    newSocket.disconnect(); // Properly disconnect socket
-                    setSocket(null); // Reset state
-                }
+                console.log("WebSocket disconnected:", socket.id);
+                socket.disconnect();
             };
         }
-
-        if (!authUser && socket) {
-            socket.disconnect();
-            setSocket(null);
-        }
-    }, [authUser, socket]);
+    }, [socket]);
 
     return (
         <SocketContext.Provider value={{ socket, onlineUsers }}>
