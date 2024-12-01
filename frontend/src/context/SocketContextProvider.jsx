@@ -6,24 +6,23 @@ import io from "socket.io-client";
 export const SocketContext = createContext();
 
 export const SocketContextProvider = ({ children }) => {
-    const { authUser } = useAuthContext(); // Get the authenticated user
+    const { authUser } = useAuthContext(); 
     const [onlineUsers, setOnlineUsers] = useState([]);
 
-    // Define the server URL
     const SERVER_URL =
         process.env.NODE_ENV === "production"
-            ? "http://localhost:5000"  
-            : "https://chat-app-ict4.onrender.com";
+        ? "https://chat-app-ict4.onrender.com"
+        : "http://localhost:5000";
 
-    // Use a singleton pattern to prevent multiple socket connections
+
     const socket = useMemo(() => {
         if (authUser) {
             const newSocket = io(SERVER_URL, {
-                transports: ["websocket"], // Use WebSocket transport
-                query: { userId: authUser._id }, // Send userId as query parameter
-                reconnectionAttempts: 10, // Retry up to 10 times
-                reconnectionDelay: 3000, // Delay 3 seconds between retries
-                timeout: 15000, // Connection timeout in milliseconds
+                transports: ["websocket"], 
+                query: { userId: authUser._id }, 
+                reconnectionAttempts: 10, 
+                reconnectionDelay: 3000, 
+                timeout: 15000,
             });
 
             // Add event listener for connection errors
