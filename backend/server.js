@@ -41,7 +41,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 
-const frontendPath = path.join(__dirname, "static", "dist");
+const frontendPath = path.join(__dirname, "./static/dist");
 console.log("Serving static files from:", frontendPath);
 
 app.use(express.static(frontendPath));
