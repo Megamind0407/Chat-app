@@ -40,14 +40,14 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 
-const frontendPath = path.join(__dirname, "static", "dist");
-console.log("Serving static files from:", frontendPath);
+// const frontendPath = path.join(__dirname, "static", "dist");
+// console.log("Serving static files from:", frontendPath);
 
-app.use(express.static(frontendPath));
+// app.use(express.static(frontendPath));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(frontendPath, "index.html"));
+// });
 
 // Start the server
 const PORT = process.env.PORT || 5000;
