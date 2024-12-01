@@ -11,20 +11,16 @@ import userRoutes from "./routes/user.routes.js";
 import connectToMongoDB from "./db/connectToMongoDB.js";
 import { app, server } from "./socket/socket.js";
 
-// Ensure compatibility for __dirname in ES modules
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config(); // Load environment variables
-
-// Debugging for deployment paths
+dotenv.config(); 
 console.log("Resolved __dirname:", __dirname);
 
-// Enable CORS for frontend
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000", // Use environment variable or default
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -45,13 +41,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 
-// Serve static files from the frontend
 const frontendPath = path.join(__dirname, "static", "dist");
 console.log("Serving static files from:", frontendPath);
 
 app.use(express.static(frontendPath));
 
-// Catch-all handler for single-page application (SPA)
 app.get("*", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
