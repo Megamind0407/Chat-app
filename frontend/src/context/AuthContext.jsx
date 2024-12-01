@@ -1,5 +1,4 @@
 import { createContext, useContext, useState } from "react";
-import config from "../config";
 
 export const AuthContext = createContext();
 
@@ -14,10 +13,11 @@ export const AuthContextProvider = ({ children }) => {
 		JSON.parse(localStorage.getItem("chat-user")) || null
 	);
 
-	const backendUrl = config.backendUrl;
+	// eslint-disable-next-line no-undef
+	const BASE_URL = process.env.BASE_URL;
 	const loginUser = async (username, password) => {
 		try {
-			const response = await fetch(`${backendUrl}/api/login`, {
+			const response = await fetch(`${BASE_URL}/api/login`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
