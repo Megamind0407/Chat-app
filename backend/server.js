@@ -17,6 +17,7 @@ const __dirname = path.dirname(__filename);
 
 dotenv.config(); 
 console.log("Resolved __dirname:", __dirname);
+
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || "http://localhost:3000",
