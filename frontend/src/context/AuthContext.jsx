@@ -13,7 +13,6 @@ export const AuthContextProvider = ({ children }) => {
 		JSON.parse(localStorage.getItem("chat-user")) || null
 	);
 
-	// eslint-disable-next-line no-undef
 	const BASE_URL = "https://chat-app-ict4.onrender.com";
 	const loginUser = async (username, password) => {
 		try {
