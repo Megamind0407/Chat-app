@@ -12,8 +12,8 @@ export const SocketContextProvider = ({ children }) => {
     // Define the server URL
     const SERVER_URL =
         process.env.NODE_ENV === "production"
-            ? "https://chat-app-ict4.onrender.com"
-            : "http://localhost:5000";
+            ? "http://localhost:5000"  
+            : "https://chat-app-ict4.onrender.com";
 
     // Use a singleton pattern to prevent multiple socket connections
     const socket = useMemo(() => {
