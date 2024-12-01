@@ -14,7 +14,7 @@ export const AuthContextProvider = ({ children }) => {
 	);
 
 	// eslint-disable-next-line no-undef
-	const BASE_URL = process.env.BASE_URL;
+	const BASE_URL = "https://chat-app-ict4.onrender.com";
 	const loginUser = async (username, password) => {
 		try {
 			const response = await fetch(`${BASE_URL}/api/login`, {
