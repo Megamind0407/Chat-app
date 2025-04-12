@@ -5,11 +5,12 @@ import toast from "react-hot-toast";
 const useSendMessage = () => {
 	const [loading, setLoading] = useState(false);
 	const { messages, setMessages, selectedConversation } = useConversation();
-
+	//Add Backend Url
+	const BASE_URL = "https://chat-app-3zo9.onrender.com";
 	const sendMessage = async (message, fileUrl = "", fileType = "") => {
 		setLoading(true);
 		try {
-			const res = await fetch(`/api/messages/send/${selectedConversation._id}`, {
+			const res = await fetch(`${BASE_URL}/api/messages/send/${selectedConversation._id}`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

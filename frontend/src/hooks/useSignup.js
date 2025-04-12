@@ -5,7 +5,8 @@ import { useAuthContext } from "../context/AuthContext";
 const useSignup = () => {
 	const [loading, setLoading] = useState(false);
 	const { setAuthUser } = useAuthContext();
-
+	//Add Backend Url
+	const BASE_URL = "https://chat-app-3zo9.onrender.com";
 	const signup = async ({ fullName, username, password, confirmPassword, gender }) => {
 		const success = handleInputErrors({ fullName, username, password, confirmPassword, gender });
 		if (!success) return;
@@ -15,7 +16,7 @@ const useSignup = () => {
 			// Check fetch call
 			console.log("Sending signup request:", { fullName, username, password, confirmPassword, gender });
 
-			const res = await fetch("/api/auth/signup", {
+			const res = await fetch(`${BASE_URL}/api/auth/signup`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

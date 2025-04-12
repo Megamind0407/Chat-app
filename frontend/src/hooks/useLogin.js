@@ -5,6 +5,8 @@ import { useAuthContext } from "../context/AuthContext";
 const useLogin = () => {
 	const [loading, setLoading] = useState(false);
 	const { setAuthUser } = useAuthContext();
+	//Add Backend Url
+	const BASE_URL = "https://chat-app-3zo9.onrender.com";
 
 	const login = async (username, password) => {
 		// Validate input fields
@@ -12,7 +14,7 @@ const useLogin = () => {
 
 		setLoading(true); // Set loading state
 		try {
-			const res = await fetch("/api/auth/login", {
+			const res = await fetch(`${BASE_URL}/api/auth/login`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ username, password }),

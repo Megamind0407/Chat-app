@@ -5,11 +5,12 @@ import toast from "react-hot-toast";
 const useLogout = () => {
 	const [loading, setLoading] = useState(false);
 	const { setAuthUser } = useAuthContext();
-
+	//Add Backend Url
+	const BASE_URL = "https://chat-app-3zo9.onrender.com";
 	const logout = async () => {
 		setLoading(true);
 		try {
-			const res = await fetch("/api/auth/logout", {
+			const res = await fetch(`${BASE_URL}/api/auth/logout`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 			});

@@ -5,13 +5,14 @@ import toast from "react-hot-toast";
 const useGetMessages = () => {
 	const [loading, setLoading] = useState(false);
 	const { messages, setMessages, selectedConversation } = useConversation();
-
+	//Add Backend Url
+	const BASE_URL = "https://chat-app-3zo9.onrender.com";
 	useEffect(() => {
 		const getMessages = async () => {
 			setLoading(true);
 			try {
 				// Fetch request with error handling
-				const res = await fetch(`/api/messages/${selectedConversation._id}`);
+				const res = await fetch(`${BASE_URL}/api/messages/${selectedConversation._id}`);
 
 				// Check if the response is ok (status code 200-299)
 				if (!res.ok) {
