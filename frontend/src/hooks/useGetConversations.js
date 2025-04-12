@@ -12,7 +12,8 @@ const useGetConversations = () => {
 			try {
 				const res = await fetch(`${BASE_URL}/api/users`, {
 					method: "GET",
-					credentials: "include", // Important: send cookies with request
+					credentials: "include", 
+					withCredentials: true
 				});
 
 				if (!res.ok) {

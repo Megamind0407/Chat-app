@@ -2,7 +2,6 @@ import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
-// ✅ Generate JWT and set cookie with proper options
 const generateTokenAndSetCookie = (userId, res) => {
 	const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
 		expiresIn: "7d",
@@ -16,7 +15,7 @@ const generateTokenAndSetCookie = (userId, res) => {
 	});
 };
 
-// ✅ Signup Controller
+
 export const signup = async (req, res) => {
 	try {
 		const { fullName, username, password, confirmPassword, gender = "male" } = req.body;
@@ -65,7 +64,6 @@ export const signup = async (req, res) => {
 	}
 };
 
-// ✅ Login Controller
 export const login = async (req, res) => {
 	try {
 		const { username, password } = req.body;
@@ -95,7 +93,7 @@ export const login = async (req, res) => {
 	}
 };
 
-// ✅ Logout Controller
+
 export const logout = (req, res) => {
 	try {
 		res.cookie("jwt", "", {

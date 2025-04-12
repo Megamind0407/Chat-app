@@ -19,7 +19,7 @@ console.log("Resolved __dirname:", __dirname);
 
 app.use(
   cors({
-    origin: "https://chat-app-lovat-two-70.vercel.app" || "http://localhost:3000",
+    origin: "https://chat-app-lovat-two-70.vercel.app/" || "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
