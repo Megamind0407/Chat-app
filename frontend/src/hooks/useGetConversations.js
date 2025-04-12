@@ -5,16 +5,23 @@ const useGetConversations = () => {
 	const [loading, setLoading] = useState(false);
 	const [conversations, setConversations] = useState([]);
 	const BASE_URL = "https://chat-app-3zo9.onrender.com";
+
 	useEffect(() => {
 		const getConversations = async () => {
 			setLoading(true);
 			try {
-				const res = await fetch(`${BASE_URL}/api/users`);
-				const data = await res.json();
-				if (data.error) {
-					throw new Error(data.error);
+				const res = await fetch(`${BASE_URL}/api/users`, {
+					method: "GET",
+					credentials: "include", // Important: send cookies with request
+				});
+
+				if (!res.ok) {
+					const errorData = await res.json();
+					throw new Error(errorData.error || "Failed to fetch conversations");
 				}
-				setConversations(data);
+
+				const data = await res.json();
+				setConversations(data.user ? [data.user] : data); // adapt based on your API shape
 			} catch (error) {
 				toast.error(error.message);
 			} finally {
@@ -27,4 +34,5 @@ const useGetConversations = () => {
 
 	return { loading, conversations };
 };
+
 export default useGetConversations;
