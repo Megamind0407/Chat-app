@@ -11,7 +11,7 @@ export const SocketContextProvider = ({ children }) => {
 
     const SERVER_URL =
         process.env.NODE_ENV === "production"
-        ? "https://chat-app-ucu7.onrender.com"
+        ? "https://chat-app-3zo9.onrender.com"
         : "http://localhost:5000";
 
 

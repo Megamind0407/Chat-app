@@ -13,7 +13,7 @@ export const AuthContextProvider = ({ children }) => {
         JSON.parse(localStorage.getItem("chat-user")) || null
     );
 
-    const BASE_URL = "https://chat-app-ucu7.onrender.com";
+    const BASE_URL = "https://chat-app-3zo9.onrender.com";
 
     /**
      * Function to log in the user.
