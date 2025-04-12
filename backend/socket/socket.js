@@ -8,7 +8,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: process.env.FRONTEND_URL || "https://localhost:3000", // Frontend domain
+        origin:  "https://chat-app-lovat-two-70.vercel.app/" || "https://localhost:3000", // Frontend domain
         methods: ["GET", "POST"],
     },
     pingTimeout: 10000,
