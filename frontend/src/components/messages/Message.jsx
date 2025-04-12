@@ -25,7 +25,41 @@ const Message = ({ message }) => {
 					<img alt='Tailwind CSS chat bubble component' src={profilePic} />
 				</div>
 			</div>
-			<div className={`chat-bubble text-white ${bubbleBgColor} ${shakeClass} pb-2`}>{message.message}</div>
+			<div className={`chat-bubble text-white ${bubbleBgColor} ${shakeClass} pb-2`}>
+				{/* Render text message if exists */}
+				{message.message && <p>{message.message}</p>}
+
+				{/* Render file if exists */}
+				{message.fileUrl && (
+					<div className="mt-2">
+						{message.fileType.startsWith("image/") ? (
+							<img
+								src={message.fileUrl}
+								alt="sent file"
+								className="max-w-xs max-h-60 rounded shadow-md"
+							/>
+						) : message.fileType === "application/pdf" ? (
+							<a
+								href={message.fileUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-blue-400 underline"
+							>
+								📄 View PDF
+							</a>
+						) : (
+							<a
+								href={message.fileUrl}
+								download
+								className="text-green-400 underline"
+							>
+								⬇️ Download File
+							</a>
+						)}
+					</div>
+				)}
+
+			</div>
 			<div className='chat-footer opacity-50 text-xs flex gap-1 items-center'>{formattedTime}</div>
 		</div>
 	);
