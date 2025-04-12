@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: chat-backend
+    env: node
+    buildCommand: npm install
+    startCommand: node backend/server.js
+    rootDir: .
+    envVars:
+      - key: MONGO_URL
+        value: mongodb+srv://aryan_2909:BqWwWWj9u7LvqA10@cluster0.xzvzami.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - key: FRONTEND_URL
+        value: https://chat-app-lovat-two-70.vercel.app/
+      - key: PORT
+        value: 5000
+
+  - type: web
+    name: chat-frontend
+    env: static
+    buildCommand: npm run build
+    staticPublishPath: frontend/dist
+    rootDir: frontend
+    envVars:
+      - key: REACT_APP_BACKEND_URL
+        value: https://chat-app-ucu7.onrender.com
