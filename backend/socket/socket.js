@@ -11,7 +11,7 @@ const io = new Server(server, {
         origin: process.env.FRONTEND_URL || "https://localhost:3000", // Frontend domain
         methods: ["GET", "POST"],
     },
-    pingTimeout: 10000, 
+    pingTimeout: 10000,
     pingInterval: 5000,
     maxHttpBufferSize: 1e6, // Limit message size to 1 MB
 });
@@ -61,6 +61,24 @@ io.on("connection", (socket) => {
             io.to(receiverSocketId).emit("receiveMessage", { message, senderId: userId });
         }
     });
+
+    // Add this for file sharing
+    socket.on("sendFile", (fileData) => {
+        socket.to(fileData.chatId).emit("fileMessage", fileData);
+    });
+
+    socket.on("typing", (chatId) => {
+        socket.to(chatId).emit("typing", chatId);
+    });
+
+    socket.on("stopTyping", (chatId) => {
+        socket.to(chatId).emit("stopTyping");
+    });
+
+    socket.on("disconnect", () => {
+        console.log("user disconnected");
+    });
 });
+
 
 export { app, io, server };

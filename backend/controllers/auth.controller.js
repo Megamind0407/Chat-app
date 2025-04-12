@@ -52,7 +52,7 @@ export const signup = async (req, res) => {
 		});
 	} catch (error) {
 		console.error("Error in signup controller:", error.message);
-		res.status(500).json({ error: "Internal Server Error" });
+		res.status(500).json("Internal Server Error" );
 	}
 };
 
@@ -63,7 +63,7 @@ export const login = async (req, res) => {
 
 		// Check if username and password are provided
 		if (!username || !password) {
-			return res.status(400).json({ error: "Username and password are required" });
+			return res.status(400).json("Username and password are required" );
 		}
 
 		// Find user by username
@@ -72,7 +72,7 @@ export const login = async (req, res) => {
 		// Validate user existence and password correctness
 		const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
 		if (!user || !isPasswordCorrect) {
-			return res.status(400).json({ error: "Invalid username or password" });
+			return res.status(400).json("Invalid username or password" );
 		}
 
 		// Generate JWT token and send user data
@@ -85,7 +85,7 @@ export const login = async (req, res) => {
 		});
 	} catch (error) {
 		console.error("Error in login controller:", error.message);
-		res.status(500).json({ error: "Internal Server Error" });
+		res.status(500).json("Internal Server Error" );
 	}
 };
 export const logout = (req, res) => {
@@ -95,6 +95,6 @@ export const logout = (req, res) => {
 		res.status(200).json({ message: "Logged out successfully" });
 	} catch (error) {
 		console.error("Error in logout controller:", error.message);
-		res.status(500).json({ error: "Internal Server Error" });
+		res.status(500).json("Internal Server Error" );
 	}
 };

@@ -3,11 +3,10 @@ import path from "path";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-
+import uploadRoute from "./routes/upload.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import userRoutes from "./routes/user.routes.js";
-
 import connectToMongoDB from "./db/connectToMongoDB.js";
 import { app, server } from "./socket/socket.js";
 
@@ -35,6 +34,10 @@ app.use((req, res, next) => {
   console.log(`Request: ${req.method} ${req.url}`);
   next();
 });
+
+
+app.use("/api/upload", uploadRoute);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // API Routes
 app.use("/api/auth", authRoutes);

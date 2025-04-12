@@ -14,9 +14,15 @@ const messageSchema = new mongoose.Schema(
 		},
 		message: {
 			type: String,
-			required: true,
+			// ✅ Removed `required: true` to make it optional
 		},
-		// createdAt, updatedAt
+		fileUrl: {
+			type: String,
+		},
+		fileType: {
+			type: String,
+			default: "",
+		},
 	},
 	{ timestamps: true }
 );
