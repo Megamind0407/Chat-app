@@ -1,18 +1,20 @@
 import { createContext, useContext, useState } from "react";
 
+// Create a context
 export const AuthContext = createContext();
 
-// Hook to use AuthContext
+// Hook to use the context
 export const useAuthContext = () => {
     return useContext(AuthContext);
 };
 
-// AuthContextProvider Component
+// Provider component
 export const AuthContextProvider = ({ children }) => {
     const [authUser, setAuthUser] = useState(
         JSON.parse(localStorage.getItem("chat-user")) || null
     );
 
+    // ✅ Your Render backend URL
     const BASE_URL = "https://chat-app-3zo9.onrender.com";
 
     /**
@@ -22,11 +24,14 @@ export const AuthContextProvider = ({ children }) => {
      */
     const loginUser = async (username, password) => {
         try {
-            const response = await fetch(`${BASE_URL}/api/login`, {
+            // ✅ Fixed endpoint path to /api/auth/login
+            const response = await fetch(`${BASE_URL}/api/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                // ✅ This enables sending/receiving cookies across domains
+                credentials: "include",
                 body: JSON.stringify({ username, password }),
             });
 
