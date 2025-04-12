@@ -14,14 +14,25 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config(); 
+dotenv.config();
 console.log("Resolved __dirname:", __dirname);
+
+const allowedOrigins = [
+  "https://chat-app-lovat-two-70.vercel.app", 
+  "http://localhost:3000"
+];
 
 app.use(
   cors({
-    origin: "https://chat-app-lovat-two-70.vercel.app/" || "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
 
@@ -29,33 +40,23 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// Debugging middleware for requests
+// Debugging middleware
 app.use((req, res, next) => {
   console.log(`Request: ${req.method} ${req.url}`);
+  console.log("Cookies:", req.cookies);
   next();
 });
 
-
+// Routes
 app.use("/api/upload", uploadRoute);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-// API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 
-// const frontendPath = path.join(__dirname, "../frontend/dist");
-// console.log("Serving static files from:", frontendPath);
-
-// app.use(express.static(frontendPath));
-
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(frontendPath, "index.html"));
-// });
-
-// Start the server
+// Start server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  connectToMongoDB(); // Connect to MongoDB
-  console.log(`Server Running on port ${PORT}`);
+  connectToMongoDB();
+  console.log(`🚀 Server running on port ${PORT}`);
 });

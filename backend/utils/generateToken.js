@@ -5,12 +5,15 @@ const generateTokenAndSetCookie = (userId, res) => {
         expiresIn: process.env.JWT_EXPIRY || "1d",
     });
 
-    // Setting the token as a secure, httpOnly cookie
+    // Convert expiry to integer (milliseconds)
+    const cookieExpiry = parseInt(process.env.COOKIE_EXPIRY) || 24 * 60 * 60 * 1000;
+
+    // ✅ Updated cookie settings for cross-origin (Vercel <-> Render)
     res.cookie("jwt", token, {
-        httpOnly: true, 
-        secure: process.env.NODE_ENV === "production", 
-        sameSite: "strict", 
-        maxAge: process.env.COOKIE_EXPIRY || 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // true for HTTPS
+        sameSite: "None", // ✅ Allow cross-site requests (required for Vercel <-> Render)
+        maxAge: cookieExpiry,
     });
 };
 
