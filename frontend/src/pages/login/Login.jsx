@@ -18,13 +18,13 @@ const Login = () => {
 			<div className='w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0'>
 				<h1 className='text-3xl font-semibold text-center text-gray-300'>
 					Login
-					<span className='text-blue-500'> ChatApp</span>
+					<span className='text-purple-500'> ChatApp</span>
 				</h1>
 
 				<form onSubmit={handleSubmit}>
 					<div>
 						<label className='label p-2'>
-							<span className='text-base label-text'>Username</span>
+							<span className='text-base label-text text-white'>Username</span>
 						</label>
 						<input
 							type='text'
@@ -37,7 +37,7 @@ const Login = () => {
 
 					<div>
 						<label className='label'>
-							<span className='text-base label-text'>Password</span>
+							<span className='text-base label-text  text-white'>Password</span>
 						</label>
 						<input
 							type='password'
