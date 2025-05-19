@@ -10,7 +10,6 @@ This is a **Real-Time Chat Application** built using the **MERN stack** (MongoDB
 
 - 🗣 **Real-Time Messaging:** Users can send and receive messages instantly.
 - 💬 **User Authentication:** Login using JWT (JSON Web Tokens).
-- 🏠 **Private & Group Chats:** Join and leave chat rooms seamlessly.
 - 🔐 **User Authentication:** User login/logout with JWT.
 - 🔔 **Notifications:** Real-time notifications when a user sends a message.
 - 💾 **Message History:** All chat messages are stored in MongoDB and can be accessed later.
